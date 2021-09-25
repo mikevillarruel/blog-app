@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    /* Firebase */
+    id 'com.google.gms.google-services'
 }
 
 android {
