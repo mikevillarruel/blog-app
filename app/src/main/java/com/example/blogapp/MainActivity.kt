@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import java.io.ByteArrayOutputStream
+import java.lang.RuntimeException
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -53,6 +54,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun dispatchTakePictureIntent() {
+
+        throw RuntimeException("Crashlytics Test")
+
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         try {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
