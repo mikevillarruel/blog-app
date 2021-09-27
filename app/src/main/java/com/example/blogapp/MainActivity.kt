@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import java.io.ByteArrayOutputStream
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -71,7 +72,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun uploadPicture(bitmap: Bitmap) {
         val storageRef = FirebaseStorage.getInstance().reference
-        val imageRef = storageRef.child("image.jpg")
+        val imageRef = storageRef.child("images/${UUID.randomUUID()}.jpg")
         val baos = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val data = baos.toByteArray()
@@ -86,10 +87,14 @@ class MainActivity : AppCompatActivity() {
         }.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val downloadUrl = task.result.toString()
+
+                FirebaseFirestore.getInstance().collection("cities").document("LA")
+                    .update(mapOf("imageUrl" to downloadUrl))
+
                 Log.d("Storage", "uploadPicture: $downloadUrl")
             }
         }
     }
 }
 
-//data class City(val population: Int = 0, val color: String = "")
+data class City(val population: Int = 0, val color: String = "", val imageUrl: String)
