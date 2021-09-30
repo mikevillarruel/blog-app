@@ -1,5 +1,6 @@
 package com.example.blogapp.domain.auth
 
+import android.graphics.Bitmap
 import com.example.blogapp.data.remote.auth.AuthDataSource
 import com.google.firebase.auth.FirebaseUser
 
@@ -11,4 +12,9 @@ class AuthRepoImpl(private val dataSource: AuthDataSource) : AuthRepo {
     override suspend fun signUp(email: String, password: String, username: String): FirebaseUser? {
         return dataSource.signUp(email, password, username)
     }
+
+    override suspend fun updateUserProfile(imageBitmap: Bitmap, username: String) {
+        return dataSource.updateUserProfile(imageBitmap, username)
+    }
+
 }

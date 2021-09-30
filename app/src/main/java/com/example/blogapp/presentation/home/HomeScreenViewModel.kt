@@ -12,7 +12,7 @@ class HomeScreenViewModel(private val repo: HomeScreenRepo) : ViewModel() {
     fun fetchLatestPosts() = liveData(Dispatchers.IO) {
         emit(Result.Loading())
         try {
-            emit(repo.getLatestPosts())
+            emit(Result.Success(repo.getLatestPosts()))
         } catch (e: Exception) {
             emit(Result.Failure(e))
         }
