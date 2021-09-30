@@ -3,12 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingHorizontal="8dp"
+    android:paddingVertical="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_marginBottom="8dp"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -40,5 +42,14 @@
         android:layout_width="match_parent"
         android:layout_height="250dp"
         tools:background="@mipmap/ic_launcher_round" />
+
+    <TextView
+        android:id="@+id/postDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:maxLines="4"
+        tools:text="This is a photo description" />
 
 </LinearLayout>
