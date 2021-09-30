@@ -37,8 +37,12 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun isUserLoggedIn() {
-        firebaseAuth.currentUser?.let {
-            findNavController().navigate(R.id.action_loginFragment_to_homeScreenFragment)
+        firebaseAuth.currentUser?.let { user ->
+            if (user.displayName.isNullOrEmpty()) {
+                findNavController().navigate(R.id.action_loginFragment_to_setupProfileFragment)
+            } else {
+                findNavController().navigate(R.id.action_loginFragment_to_homeScreenFragment)
+            }
         }
     }
 
@@ -77,7 +81,13 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 }
                 is Result.Success -> {
                     binding.progressBar.visibility = View.GONE
-                    findNavController().navigate(R.id.action_loginFragment_to_homeScreenFragment)
+
+                    if (result.data?.displayName.isNullOrEmpty()) {
+                        findNavController().navigate(R.id.action_loginFragment_to_setupProfileFragment)
+                    } else {
+                        findNavController().navigate(R.id.action_loginFragment_to_homeScreenFragment)
+                    }
+
                     Toast.makeText(
                         requireContext(),
                         "Welcome ${result.data?.email}",
