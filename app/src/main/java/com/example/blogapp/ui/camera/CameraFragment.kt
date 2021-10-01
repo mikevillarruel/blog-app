@@ -9,13 +9,29 @@ import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.example.blogapp.R
+import com.example.blogapp.core.Result
+import com.example.blogapp.data.remote.camera.CameraDataSource
 import com.example.blogapp.databinding.FragmentCameraBinding
+import com.example.blogapp.domain.camera.CameraRepoImpl
+import com.example.blogapp.presentation.camera.CameraViewModel
+import com.example.blogapp.presentation.camera.CameraViewModelFactory
 
 class CameraFragment : Fragment(R.layout.fragment_camera) {
 
     private val REQUEST_IMAGE_CAPTURE = 1
     private lateinit var binding: FragmentCameraBinding
+    private var bitmap: Bitmap? = null
+    private val viewModel by viewModels<CameraViewModel> {
+        CameraViewModelFactory(
+            CameraRepoImpl(
+                CameraDataSource()
+            )
+        )
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -28,6 +44,37 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
         } catch (e: ActivityNotFoundException) {
             Toast.makeText(requireContext(), "Camera not found", Toast.LENGTH_SHORT).show()
         }
+
+        binding.btnUploadPhoto.setOnClickListener {
+
+            val description = binding.etxtPhotoDescription.text.toString().trim()
+
+            bitmap?.let {
+                viewModel.uploadPhoto(it, description)
+                    .observe(viewLifecycleOwner, Observer { result ->
+                        when (result) {
+                            is Result.Loading -> {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Uploading photo ...",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                            is Result.Success -> {
+                                findNavController().navigate(R.id.action_cameraFragment_to_homeScreenFragment)
+                            }
+                            is Result.Failure -> {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Error: ${result.exception}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                    })
+            }
+
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -35,6 +82,7 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             val imageBitmap = data?.extras?.get("data") as Bitmap
             binding.imageAddPhoto.setImageBitmap(imageBitmap)
+            bitmap = imageBitmap
         }
     }
 
