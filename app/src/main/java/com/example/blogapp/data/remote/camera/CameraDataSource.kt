@@ -28,7 +28,8 @@ class CameraDataSource {
                     postDescription = description,
                     profilePicture = it?.photoUrl.toString(),
                     postTimestamp = Timestamp.now(),
-                    postImage = downloadUrl
+                    postImage = downloadUrl,
+                    uid = user?.uid.toString()
                 )
             )
         }
