@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.blogapp.core.BaseViewHolder
+import com.example.blogapp.core.TimeUtils
 import com.example.blogapp.core.hide
 import com.example.blogapp.data.model.Post
 import com.example.blogapp.databinding.PostItemViewBinding
@@ -40,7 +41,10 @@ class HomeScreenAdapter(private val postList: List<Post>) :
             } else {
                 binding.postDescription.text = item.postDescription
             }
-            binding.postTimestamp.text = "2 hours ago"
+            val createdAt = item.createdAt?.time?.div(1000L)?.let {
+                TimeUtils.getTimeAgo(it.toInt())
+            }
+            binding.postTimestamp.text = createdAt
 
         }
     }

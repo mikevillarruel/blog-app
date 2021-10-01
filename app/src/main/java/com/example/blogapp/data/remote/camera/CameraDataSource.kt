@@ -2,7 +2,6 @@ package com.example.blogapp.data.remote.camera
 
 import android.graphics.Bitmap
 import com.example.blogapp.data.model.Post
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -27,7 +26,6 @@ class CameraDataSource {
                     profileName = it?.displayName.toString(),
                     postDescription = description,
                     profilePicture = it?.photoUrl.toString(),
-                    postTimestamp = Timestamp.now(),
                     postImage = downloadUrl,
                     uid = user?.uid.toString()
                 )
